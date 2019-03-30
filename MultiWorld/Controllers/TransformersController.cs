@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using MultiWorld.DAL;
+using MultiWorld.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using MultiWorld.Models;
 
 namespace MultiWorld.Controllers
 {
@@ -12,12 +11,17 @@ namespace MultiWorld.Controllers
     [ApiController]
     public class TransformersController : ControllerBase
     {
+        private readonly MultiWorldDbContext _context;
+        public TransformersController(MultiWorldDbContext context)
+        {
+            _context = context;
+        }
         // GET api/Transformer/Autobots
         [HttpGet]
         [Route("Autobots")]
         public ActionResult<IEnumerable<TransformerDto>> GetAutobots()
         {
-            return Ok();
+            return Ok(_context.Transformers.Where(p => p.Allegiance == AllegianceType.Autobot).OrderBy(p => p.Name));
         }
         // GET api/Transformer/Decepticons
         [HttpGet]
@@ -55,6 +59,9 @@ namespace MultiWorld.Controllers
                 Firepower = transformerDto.Firepower,
                 Skill = transformerDto.Skill
             };
+            _context.Transformers.Add(transformer);
+            _context.SaveChanges();
+
             transformerDto.Id = transformer.Id.ToString();
             return Ok(transformerDto);
         }

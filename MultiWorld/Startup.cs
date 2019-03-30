@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MultiWorld.DAL;
 
 namespace MultiWorld
 {
@@ -24,6 +26,8 @@ namespace MultiWorld
                 config.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "MultiWorld API", Description = "MultiWorld API" });
                 config.DescribeAllEnumsAsStrings();
             });
+            services.AddDbContext<MultiWorldDbContext>(opt =>
+                opt.UseSqlServer(Configuration.GetConnectionString("DbConnectionString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
