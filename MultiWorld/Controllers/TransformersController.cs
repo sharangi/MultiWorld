@@ -28,14 +28,14 @@ namespace MultiWorld.Controllers
         [Route("Decepticons")]
         public ActionResult<IEnumerable<TransformerDto>> GetDecepticons()
         {
-            return Ok();
+            return Ok(_context.Transformers.Where(p => p.Allegiance == AllegianceType.Decepticon).OrderBy(p => p.Name));
         }
 
         // GET: api/Transformers/{id}
         [HttpGet("{id}", Name = "Get")]
         public ActionResult<TransformerDto> Get(Guid id)
         {
-            return Ok();
+            return Ok(_context.Transformers.Where(p => p.Id == id).FirstOrDefault());
         }
 
         // POST: api/Transformers
@@ -68,16 +68,55 @@ namespace MultiWorld.Controllers
 
         // PUT: api/Transformers/{id}
         [HttpPut("{id}")]
-        public ActionResult<TransformerDto> Put(Guid id, [FromBody]TransformerDto transformerDtor)
+        public ActionResult<TransformerDto> Put(Guid id, [FromBody]TransformerDto transformerDto)
         {
-            return Ok();
+            if (!ModelState.IsValid)
+            {
+                BadRequest(ModelState);
+            }
+            var guidFromRequestBody = new Guid();
+            if(!Guid.TryParse(transformerDto.Id, out guidFromRequestBody))
+            {
+                BadRequest("Id invalid in message request body");
+            }
+            if (guidFromRequestBody != id)
+            {
+                BadRequest("Id in the URL does not match Id specified in the body");
+            }
+            var transformer = _context.Transformers.Where(p => p.Id == id).FirstOrDefault();
+            if (transformer == null)
+            {
+                return NotFound("Transformer with id " + id + " not found.");
+            }
+            transformer.Name = transformerDto.Name;
+            transformer.Allegiance = transformerDto.Allegiance;
+            transformer.Strength = transformerDto.Strength;
+            transformer.Intelligence = transformerDto.Intelligence;
+            transformer.Speed = transformerDto.Speed;
+            transformer.Endurance = transformerDto.Endurance;
+            transformer.Rank = transformerDto.Rank;
+            transformer.Courage = transformerDto.Courage;
+            transformer.Firepower = transformerDto.Firepower;
+            transformer.Skill = transformerDto.Skill;
+            transformer.LastUpdateTime = DateTime.UtcNow;
+
+            _context.Transformers.Update(transformer);
+            _context.SaveChanges();
+            return Ok(transformerDto);
         }
 
         // DELETE: api/Transformers/{id}
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id)
         {
-            return Ok();
+            var transformer = _context.Transformers.Where(p => p.Id == id).FirstOrDefault();
+            if (transformer == null)
+            {
+                return NotFound("Transformer with id " + id + " not found.");
+            }
+            _context.Transformers.Remove(transformer);
+            _context.SaveChanges();
+            return Ok("Transformer with id "+id+" removed.");
         }
     }
 }
