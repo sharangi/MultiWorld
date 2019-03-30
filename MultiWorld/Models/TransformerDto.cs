@@ -1,24 +1,10 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MultiWorld.Models
 {
-
-    public enum AllegianceType
+    public class TransformerDto
     {
-        Autobot = 1,
-        Decepticon = 2
-    }
-    public class Transformer
-    {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime InsertTime { get; set; } = DateTime.UtcNow;
-
-        public DateTime? LastUpdateTime { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -51,10 +37,6 @@ namespace MultiWorld.Models
         [Range(1, 10)]
         public int Skill { get; set; }
 
-        public int GetScore()
-        {
-            return this.Strength + this.Intelligence + this.Speed + this.Endurance + this.Rank + this.Courage + this.Firepower + this.Skill;
-        }
-
+        public int? OverallScore { get; set; }
     }
 }

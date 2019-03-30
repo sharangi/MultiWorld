@@ -22,6 +22,7 @@ namespace MultiWorld
             services.AddSwaggerGen(config =>
             {
                 config.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "MultiWorld API", Description = "MultiWorld API" });
+                config.DescribeAllEnumsAsStrings();
             });
         }
 
@@ -44,6 +45,7 @@ namespace MultiWorld
             app.UseSwaggerUI(config =>
             {
                 config.SwaggerEndpoint("/swagger/v1/swagger.json","MultiWorld API");
+                config.RoutePrefix = string.Empty;
             });
         }
     }

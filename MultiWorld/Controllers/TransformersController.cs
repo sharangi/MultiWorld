@@ -12,36 +12,65 @@ namespace MultiWorld.Controllers
     [ApiController]
     public class TransformersController : ControllerBase
     {
-        // GET: api/Transformers
+        // GET api/Transformer/Autobots
         [HttpGet]
-        public IEnumerable<Transformer> Get()
+        [Route("Autobots")]
+        public ActionResult<IEnumerable<TransformerDto>> GetAutobots()
         {
-            return null;
+            return Ok();
+        }
+        // GET api/Transformer/Decepticons
+        [HttpGet]
+        [Route("Decepticons")]
+        public ActionResult<IEnumerable<TransformerDto>> GetDecepticons()
+        {
+            return Ok();
         }
 
-        // GET: api/Transformers/5
+        // GET: api/Transformers/{id}
         [HttpGet("{id}", Name = "Get")]
-        public string Get(Guid id)
+        public ActionResult<TransformerDto> Get(Guid id)
         {
-            return "value";
+            return Ok();
         }
 
         // POST: api/Transformers
         [HttpPost]
-        public void Post([FromBody] Transformer transformer)
+        public ActionResult<TransformerDto> Post([FromBody] TransformerDto transformerDto)
         {
+            if (!ModelState.IsValid)
+            {
+                BadRequest(ModelState);
+            }
+            var transformer = new Transformer()
+            {
+                Name = transformerDto.Name,
+                Allegiance = transformerDto.Allegiance,
+                Strength = transformerDto.Strength,
+                Intelligence = transformerDto.Intelligence,
+                Speed = transformerDto.Speed,
+                Endurance = transformerDto.Endurance,
+                Rank = transformerDto.Rank,
+                Courage = transformerDto.Courage,
+                Firepower = transformerDto.Firepower,
+                Skill = transformerDto.Skill
+            };
+            transformerDto.Id = transformer.Id.ToString();
+            return Ok(transformerDto);
         }
 
-        // PUT: api/Transformers/5
+        // PUT: api/Transformers/{id}
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] Transformer transformer)
+        public ActionResult<TransformerDto> Put(Guid id, [FromBody]TransformerDto transformerDtor)
         {
+            return Ok();
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Transformers/{id}
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public ActionResult Delete(Guid id)
         {
+            return Ok();
         }
     }
 }
