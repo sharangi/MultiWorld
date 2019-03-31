@@ -30,6 +30,7 @@ namespace MultiWorld
             services.AddDbContext<MultiWorldDbContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DbConnectionString")));
             services.AddScoped<ITransformerRepository, TransformerRepository>();
+            services.AddScoped<IAdoRepository, AdoRepository>();
 
             // Register application service implementations here ----->
             services.AddScoped<ITransformerService, TransformerService>();

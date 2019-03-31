@@ -17,14 +17,24 @@ namespace MultiWorld.Controllers
         {
             _transformerService = transformerService;
         }
-        // GET api/Transformer/Autobots
+        // GET api/Transformers/{id}/Score
+        [HttpGet("{id}/Score")]
+        public ActionResult<IEnumerable<TransformerDto>> GetScore(Guid id)
+        {
+            var score = _transformerService.GetTransformerScore(id);
+            if (score == null)
+                return NotFound("Score for Transformer with id " + id + " not found.");
+            else
+                return Ok(score);
+        }
+        // GET api/Transformers/Autobots
         [HttpGet]
         [Route("Autobots")]
         public ActionResult<IEnumerable<TransformerDto>> GetAutobots()
         {
             return Ok(_transformerService.GetAllAutobots());
         }
-        // GET api/Transformer/Decepticons
+        // GET api/Transformers/Decepticons
         [HttpGet]
         [Route("Decepticons")]
         public ActionResult<IEnumerable<TransformerDto>> GetDecepticons()

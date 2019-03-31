@@ -15,13 +15,17 @@ namespace MultiWorld.Services
         void Add(Transformer transformer);
         void Update(Transformer transformer);
         void Remove(Transformer transformer);
+        int? GetTransformerScore(Guid id);
     }
     public class TransformerService : ITransformerService
     {
         private readonly ITransformerRepository _transformerRepository;
-        public TransformerService(ITransformerRepository transformerRepository)
+        private readonly IAdoRepository _adoRepository;
+
+        public TransformerService(ITransformerRepository transformerRepository, IAdoRepository adoRepository)
         {
             _transformerRepository = transformerRepository;
+            _adoRepository = adoRepository;
         }
 
         public Transformer GetTransformerById(Guid id)
@@ -50,6 +54,10 @@ namespace MultiWorld.Services
         {
             _transformerRepository.Delete(transformer);
             _transformerRepository.Commit();
+        }
+        public int? GetTransformerScore(Guid id)
+        {
+            return _adoRepository.GetTransformerScore(id);
         }
     }
 }
