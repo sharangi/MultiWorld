@@ -28,21 +28,9 @@ namespace MultiWorld.Models
             _survivors = new List<TransformerDto>();
             foreach(var survivor in survivors)
             {
-                _survivors.Add(new TransformerDto()
-                {
-                    Id = survivor.Id.ToString(),
-                    Name = survivor.Name,
-                    Allegiance = survivor.Allegiance,
-                    Strength = survivor.Strength,
-                    Intelligence = survivor.Intelligence,
-                    Speed = survivor.Speed,
-                    Endurance = survivor.Endurance,
-                    Rank = survivor.Rank,
-                    Courage = survivor.Courage,
-                    Firepower = survivor.Firepower,
-                    Skill = survivor.Skill,
-                    OverallScore = survivor.GetScore()
-                });
+                _survivors.Add(
+                    TransformerDto.ConvertEntityToDto(survivor)
+                    );
             }
         }
     }

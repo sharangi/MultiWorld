@@ -6,6 +6,9 @@ namespace MultiWorld.Models
 {
     public class TransformerDto
     {
+        /// <summary>
+        /// This is a system generated field, user provided values will not be persisted.
+        /// </summary>
         public string Id { get; set; }
 
         [Required]
@@ -40,6 +43,31 @@ namespace MultiWorld.Models
         [Range(1, 10)]
         public int Skill { get; set; }
 
+        /// <summary>
+        /// This is a system generated field, user provided values will not be persisted.
+        /// </summary>
         public int? OverallScore { get; set; }
+
+        public static TransformerDto ConvertEntityToDto(Transformer transformer)
+        {
+            if (transformer == null)
+                return null;
+            var transformerDto = new TransformerDto()
+            {
+                Id = transformer.Id.ToString(),
+                Name = transformer.Name,
+                Allegiance = transformer.Allegiance,
+                Strength = transformer.Strength,
+                Intelligence = transformer.Intelligence,
+                Speed = transformer.Speed,
+                Endurance = transformer.Endurance,
+                Rank = transformer.Rank,
+                Courage = transformer.Courage,
+                Firepower = transformer.Firepower,
+                Skill = transformer.Skill,
+                OverallScore = transformer.GetScore()
+            };
+            return transformerDto;
+        }
     }
 }

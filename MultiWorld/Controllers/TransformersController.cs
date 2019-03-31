@@ -32,21 +32,31 @@ namespace MultiWorld.Controllers
         [Route("Autobots")]
         public ActionResult<IEnumerable<TransformerDto>> GetAutobots()
         {
-            return Ok(_transformerService.GetAllAutobots());
+            var autobots = _transformerService.GetAllAutobots();
+            var autobotDtos = autobots.Select(transformer => TransformerDto.ConvertEntityToDto(transformer));
+            return Ok(autobotDtos);
         }
         // GET api/Transformers/Decepticons
         [HttpGet]
         [Route("Decepticons")]
         public ActionResult<IEnumerable<TransformerDto>> GetDecepticons()
         {
-            return Ok(_transformerService.GetAllDecepticons());
+            var decepticons = _transformerService.GetAllDecepticons();
+            var decepticonDtos = decepticons.Select( transformer => TransformerDto.ConvertEntityToDto(transformer));
+            return Ok(decepticonDtos);
         }
 
         // GET: api/Transformers/{id}
         [HttpGet("{id}", Name = "Get")]
         public ActionResult<TransformerDto> Get(Guid id)
         {
-            return Ok(_transformerService.GetTransformerById(id));
+            var transformer = _transformerService.GetTransformerById(id);
+            if (transformer == null)
+            {
+                return NotFound("Transformer with id " + id + " not found.");
+            }
+            var transformerDto = TransformerDto.ConvertEntityToDto(transformer);
+            return Ok(transformerDto);
         }
 
         // POST: api/Transformers
@@ -74,6 +84,7 @@ namespace MultiWorld.Controllers
             _transformerService.Add(transformer);
 
             transformerDto.Id = transformer.Id.ToString();
+            transformerDto.OverallScore = transformer.GetScore();
             return Ok(transformerDto);
         }
 
@@ -112,6 +123,7 @@ namespace MultiWorld.Controllers
             transformer.LastUpdateTime = DateTime.UtcNow;
 
             _transformerService.Update(transformer);
+            transformerDto.OverallScore = transformer.GetScore();
 
             return Ok(transformerDto);
         }
@@ -127,6 +139,6 @@ namespace MultiWorld.Controllers
             }
             _transformerService.Remove(transformer);
             return Ok("Transformer with id "+id+" removed.");
-        }
+        }       
     }
 }
