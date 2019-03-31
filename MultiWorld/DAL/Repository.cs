@@ -12,10 +12,10 @@ namespace MultiWorld.DAL
     {        
         IQueryable<TEntity> GetAll();
 
-        //void Add(TEntity entity);
-        //void Update(TEntity entity);
-        //void Delete(TEntity entity);
-        //void Commit();
+        void Add(TEntity entity);
+        void Update(TEntity entity);
+        void Delete(TEntity entity);
+        void Commit();
     }
      public class Repository<TEntity> where TEntity : class
     {
@@ -30,6 +30,22 @@ namespace MultiWorld.DAL
         public IQueryable<TEntity> GetAll()
         {
             return _dbSet;
+        }
+        public void Add(TEntity entity)
+        {
+            _dbSet.Add(entity);
+        }
+        public void Update(TEntity entity)
+        {
+            _dbSet.Update(entity);
+        }
+        public void Delete(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+        }
+        public void Commit()
+        {
+            _context.SaveChanges();
         }
     }
 }

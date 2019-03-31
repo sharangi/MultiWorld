@@ -11,11 +11,9 @@ namespace MultiWorld.Controllers
     [ApiController]
     public class TransformersController : ControllerBase
     {
-        private readonly MultiWorldDbContext _context;
         private readonly ITransformerRepository _transformerRepository;
-        public TransformersController(MultiWorldDbContext context, ITransformerRepository transformerRepository)
+        public TransformersController(ITransformerRepository transformerRepository)
         {
-            _context = context;
             _transformerRepository = transformerRepository;
         }
         // GET api/Transformer/Autobots
@@ -61,8 +59,8 @@ namespace MultiWorld.Controllers
                 Firepower = transformerDto.Firepower,
                 Skill = transformerDto.Skill
             };
-            _context.Transformers.Add(transformer);
-            _context.SaveChanges();
+            _transformerRepository.Add(transformer);
+            _transformerRepository.Commit();
 
             transformerDto.Id = transformer.Id.ToString();
             return Ok(transformerDto);
@@ -85,7 +83,7 @@ namespace MultiWorld.Controllers
             {
                 BadRequest("Id in the URL does not match Id specified in the body");
             }
-            var transformer = _context.Transformers.Where(p => p.Id == id).FirstOrDefault();
+            var transformer = _transformerRepository.GetAll().Where(p => p.Id == id).FirstOrDefault();
             if (transformer == null)
             {
                 return NotFound("Transformer with id " + id + " not found.");
@@ -102,8 +100,8 @@ namespace MultiWorld.Controllers
             transformer.Skill = transformerDto.Skill;
             transformer.LastUpdateTime = DateTime.UtcNow;
 
-            _context.Transformers.Update(transformer);
-            _context.SaveChanges();
+            _transformerRepository.Update(transformer);
+            _transformerRepository.Commit();
             return Ok(transformerDto);
         }
 
@@ -111,13 +109,13 @@ namespace MultiWorld.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id)
         {
-            var transformer = _context.Transformers.Where(p => p.Id == id).FirstOrDefault();
+            var transformer = _transformerRepository.GetAll().Where(p => p.Id == id).FirstOrDefault();
             if (transformer == null)
             {
                 return NotFound("Transformer with id " + id + " not found.");
             }
-            _context.Transformers.Remove(transformer);
-            _context.SaveChanges();
+            _transformerRepository.Delete(transformer);
+            _transformerRepository.Commit();
             return Ok("Transformer with id "+id+" removed.");
         }
     }
