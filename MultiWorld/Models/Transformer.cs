@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,6 +27,7 @@ namespace MultiWorld.Models
 
         [Required]
         [EnumDataType(typeof(AllegianceType))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public AllegianceType Allegiance { get; set; }
 
         [Range(1, 10)]
