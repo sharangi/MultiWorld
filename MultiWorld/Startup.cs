@@ -34,6 +34,7 @@ namespace MultiWorld
 
             // Register application service implementations here ----->
             services.AddScoped<ITransformerService, TransformerService>();
+            services.AddScoped<IWarSimulationService, WarSimulationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
