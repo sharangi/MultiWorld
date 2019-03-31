@@ -1,3 +1,5 @@
 /.vs/*
 /MultiWorld/bin/Debug/*
 /MultiWorld/obj/Debug/*
+/MultiWorld.Tests/bin/*
+/MultiWorld.Tests/obj/Debug/*

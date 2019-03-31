@@ -11,14 +11,14 @@ namespace MultiWorld.Services
         public static readonly string Optimus = "Optimus".ToLower();
         public static readonly string Predaking = "Predaking".ToLower();
 
-        public static bool OptimusVsPredakingNoSurvivorsRule(List<string> autobotNames, List<string> decepticonNames)
+        public static bool CanThereBeSurvivorsRule(List<string> autobotNames, List<string> decepticonNames)
         {
             if ((autobotNames.Contains(Optimus) && decepticonNames.Contains(Predaking)) ||
                 (autobotNames.Contains(Predaking) && decepticonNames.Contains(Optimus)))
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
         public static List<Transformer> OptimusOrPredakingWinsByNameRule(Transformer a, Transformer b)
         {

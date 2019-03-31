@@ -26,7 +26,7 @@ namespace MultiWorld.Services
             //Check for no-survivor conditions
             var autobotNames = _transformerService.GetAllAutobots().Select(p => p.Name.ToLower()).ToList();
             var decepticonNames = _transformerService.GetAllDecepticons().Select(p => p.Name.ToLower()).ToList();
-            if(BattleRules.OptimusVsPredakingNoSurvivorsRule(autobotNames,decepticonNames))
+            if(BattleRules.CanThereBeSurvivorsRule(autobotNames,decepticonNames) == false)
             {
                 return survivers;
             }
@@ -59,44 +59,35 @@ namespace MultiWorld.Services
             }
             else
             {
-                for (; i < rankedAutobots.Count(); i++)
+                for (; i < rankedDecepticons.Count(); i++)
                 {
                     survivers.Add(rankedDecepticons[i]);
                 }
             }           
             return survivers;
         }
-        private List<Transformer> OneOnOneBattle(Transformer a, Transformer b)
+        public static List<Transformer> OneOnOneBattle(Transformer a, Transformer b)
         {
             var survivors = BattleRules.OptimusOrPredakingWinsByNameRule(a, b);
-            if (!survivors.Any())
+            if (survivors.Any())
             {
-                var survivor = BattleRules.StrengthAndCourageRule(a, b);
-                if (survivor != null)
-                    survivors.Add(survivor);
+                return survivors;
             }
-            if (!survivors.Any())
+            var survivor = BattleRules.StrengthAndCourageRule(a, b);
+            if (survivor != null)
+                survivors.Add(survivor);
+            if (survivors.Any())
             {
-                var survivor = BattleRules.StrengthAndCourageRule(b, a);
-                if (survivor != null)
-                    survivors.Add(survivor);
+                return survivors;
             }
-            if (!survivors.Any())
+            survivor = BattleRules.SkillRule(a, b);
+            if (survivor != null)
+                survivors.Add(survivor);
+            if (survivors.Any())
             {
-                var survivor = BattleRules.SkillRule(a, b);
-                if (survivor != null)
-                    survivors.Add(survivor);
+                return survivors;
             }
-            if (!survivors.Any())
-            {
-                var survivor = BattleRules.SkillRule(b, a);
-                if (survivor != null)
-                    survivors.Add(survivor);
-            }
-            if (!survivors.Any())
-            {
-                survivors.AddRange(BattleRules.ScoreRule(a, b));
-            }
+            survivors.AddRange(BattleRules.ScoreRule(a, b));
             return survivors;
         }
     }

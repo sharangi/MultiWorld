@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.539
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiWorld", "MultiWorld\MultiWorld.csproj", "{5A4BF1C1-CBB0-4C30-8050-EA462F351D5E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiWorld.Tests", "MultiWorld.Tests\MultiWorld.Tests.csproj", "{C9AEB425-1BBA-4C80-A054-D401166ED8DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5A4BF1C1-CBB0-4C30-8050-EA462F351D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A4BF1C1-CBB0-4C30-8050-EA462F351D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A4BF1C1-CBB0-4C30-8050-EA462F351D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9AEB425-1BBA-4C80-A054-D401166ED8DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9AEB425-1BBA-4C80-A054-D401166ED8DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9AEB425-1BBA-4C80-A054-D401166ED8DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9AEB425-1BBA-4C80-A054-D401166ED8DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
