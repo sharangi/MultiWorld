@@ -12,30 +12,32 @@ namespace MultiWorld.Controllers
     public class TransformersController : ControllerBase
     {
         private readonly MultiWorldDbContext _context;
-        public TransformersController(MultiWorldDbContext context)
+        private readonly ITransformerRepository _transformerRepository;
+        public TransformersController(MultiWorldDbContext context, ITransformerRepository transformerRepository)
         {
             _context = context;
+            _transformerRepository = transformerRepository;
         }
         // GET api/Transformer/Autobots
         [HttpGet]
         [Route("Autobots")]
         public ActionResult<IEnumerable<TransformerDto>> GetAutobots()
         {
-            return Ok(_context.Transformers.Where(p => p.Allegiance == AllegianceType.Autobot).OrderBy(p => p.Name));
+            return Ok(_transformerRepository.GetAll().Where(p => p.Allegiance == AllegianceType.Autobot).OrderBy(p => p.Name));
         }
         // GET api/Transformer/Decepticons
         [HttpGet]
         [Route("Decepticons")]
         public ActionResult<IEnumerable<TransformerDto>> GetDecepticons()
         {
-            return Ok(_context.Transformers.Where(p => p.Allegiance == AllegianceType.Decepticon).OrderBy(p => p.Name));
+            return Ok(_transformerRepository.GetAll().Where(p => p.Allegiance == AllegianceType.Decepticon).OrderBy(p => p.Name));
         }
 
         // GET: api/Transformers/{id}
         [HttpGet("{id}", Name = "Get")]
         public ActionResult<TransformerDto> Get(Guid id)
         {
-            return Ok(_context.Transformers.Where(p => p.Id == id).FirstOrDefault());
+            return Ok(_transformerRepository.GetAll().Where(p => p.Id == id).FirstOrDefault());
         }
 
         // POST: api/Transformers

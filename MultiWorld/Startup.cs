@@ -28,6 +28,7 @@ namespace MultiWorld
             });
             services.AddDbContext<MultiWorldDbContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DbConnectionString")));
+            services.AddScoped<ITransformerRepository, TransformerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
