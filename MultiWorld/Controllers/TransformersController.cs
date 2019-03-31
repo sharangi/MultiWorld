@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiWorld.DAL;
 using MultiWorld.Models;
+using MultiWorld.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +12,31 @@ namespace MultiWorld.Controllers
     [ApiController]
     public class TransformersController : ControllerBase
     {
-        private readonly ITransformerRepository _transformerRepository;
-        public TransformersController(ITransformerRepository transformerRepository)
+        private readonly ITransformerService _transformerService;
+        public TransformersController(ITransformerService transformerService)
         {
-            _transformerRepository = transformerRepository;
+            _transformerService = transformerService;
         }
         // GET api/Transformer/Autobots
         [HttpGet]
         [Route("Autobots")]
         public ActionResult<IEnumerable<TransformerDto>> GetAutobots()
         {
-            return Ok(_transformerRepository.GetAll().Where(p => p.Allegiance == AllegianceType.Autobot).OrderBy(p => p.Name));
+            return Ok(_transformerService.GetAllAutobots());
         }
         // GET api/Transformer/Decepticons
         [HttpGet]
         [Route("Decepticons")]
         public ActionResult<IEnumerable<TransformerDto>> GetDecepticons()
         {
-            return Ok(_transformerRepository.GetAll().Where(p => p.Allegiance == AllegianceType.Decepticon).OrderBy(p => p.Name));
+            return Ok(_transformerService.GetAllDecepticons());
         }
 
         // GET: api/Transformers/{id}
         [HttpGet("{id}", Name = "Get")]
         public ActionResult<TransformerDto> Get(Guid id)
         {
-            return Ok(_transformerRepository.GetAll().Where(p => p.Id == id).FirstOrDefault());
+            return Ok(_transformerService.GetTransformerById(id));
         }
 
         // POST: api/Transformers
@@ -59,8 +60,8 @@ namespace MultiWorld.Controllers
                 Firepower = transformerDto.Firepower,
                 Skill = transformerDto.Skill
             };
-            _transformerRepository.Add(transformer);
-            _transformerRepository.Commit();
+
+            _transformerService.Add(transformer);
 
             transformerDto.Id = transformer.Id.ToString();
             return Ok(transformerDto);
@@ -83,7 +84,7 @@ namespace MultiWorld.Controllers
             {
                 BadRequest("Id in the URL does not match Id specified in the body");
             }
-            var transformer = _transformerRepository.GetAll().Where(p => p.Id == id).FirstOrDefault();
+            var transformer = _transformerService.GetTransformerById(id);
             if (transformer == null)
             {
                 return NotFound("Transformer with id " + id + " not found.");
@@ -100,8 +101,8 @@ namespace MultiWorld.Controllers
             transformer.Skill = transformerDto.Skill;
             transformer.LastUpdateTime = DateTime.UtcNow;
 
-            _transformerRepository.Update(transformer);
-            _transformerRepository.Commit();
+            _transformerService.Update(transformer);
+
             return Ok(transformerDto);
         }
 
@@ -109,13 +110,12 @@ namespace MultiWorld.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id)
         {
-            var transformer = _transformerRepository.GetAll().Where(p => p.Id == id).FirstOrDefault();
+            var transformer = _transformerService.GetTransformerById(id);
             if (transformer == null)
             {
                 return NotFound("Transformer with id " + id + " not found.");
             }
-            _transformerRepository.Delete(transformer);
-            _transformerRepository.Commit();
+            _transformerService.Remove(transformer);
             return Ok("Transformer with id "+id+" removed.");
         }
     }

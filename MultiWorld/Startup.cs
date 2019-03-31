@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MultiWorld.DAL;
+using MultiWorld.Services;
 
 namespace MultiWorld
 {
@@ -29,6 +30,9 @@ namespace MultiWorld
             services.AddDbContext<MultiWorldDbContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("DbConnectionString")));
             services.AddScoped<ITransformerRepository, TransformerRepository>();
+
+            // Register application service implementations here ----->
+            services.AddScoped<ITransformerService, TransformerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
